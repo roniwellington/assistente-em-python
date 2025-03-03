@@ -6,6 +6,7 @@ import os
 
 class AssistenteBase():
     def __init__(self, nome : str, instrucoes : str, caminho_arquivo : str):
+        load_dotenv()
         self.cliente : OpenAI = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.id_arquivo : str = self.associar_arquivo(caminho_arquivo=caminho_arquivo)
         self.assistente : Assistant = self.criar_assistente(nome=nome, instrucoes=instrucoes, file_id=self.id_arquivo)
@@ -45,4 +46,8 @@ class AssistenteBase():
     
     def apagar_assistente(self):
         resposta = self.cliente.beta.assistants.delete(self.assistente.id)
+        return resposta
+    
+    def apagar_thread(self):
+        resposta = self.cliente.beta.threads.delete(self.threads.id)
         return resposta
